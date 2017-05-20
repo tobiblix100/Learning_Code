@@ -19,7 +19,7 @@ print br.form
 br["ctl00$phMainContent$dropDownAwardDate"] = ["Between"]
 br["ctl00$phMainContent$txtGrantDateFrom"] = "01/01/2004"
 br["ctl00$phMainContent$txtGrantDateTo"]  = "20/01/2004"
-
+print br
 
 response = br.submit()
 print response.read()
