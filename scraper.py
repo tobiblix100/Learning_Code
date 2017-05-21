@@ -1,25 +1,25 @@
-###############################################################################
-# START HERE: Tutorial for scraping pages behind form, using the
-# very powerful Mechanize library. Documentation is here: 
-# http://wwwsearch.sourceforge.net/mechanize/
-###############################################################################
-import mechanize 
+import scraperwiki
+import urllib
 import lxml.html
 
-lotterygrantsurl = "http://www.lottery.culture.gov.uk/AdvancedSearch.aspx"
+def scrape_links(root):
+  thumbimgs = root.cssselect("div.thumb-image-box")
+  for thumbimg in thumbimgs:
+    thumblink = thumbimg.cssselect("a")
+    if thumblink:
+      thumblinks = thumblink[0].attrib.get("href")
+      thumburl = baseurl+thumblinks
+      print thumburl
+      
+      
+  
 
-br = mechanize.Browser()
-response = br.open(lotterygrantsurl)
+starting_url = "http://medcell.med.yale.edu/image_gallery/home.php"
+baseurl = "http://medcell.med.yale.edu/image_gallery/"
 
-print "All forms:", [ form.name  for form in br.forms() ]
+def scrape_and_look_for_next_link(url):
+  html = scraperwiki.scrape(url)
+  root = lxml.html.fromstring(html)
+  scrape_links(root)
 
-br.select_form(name="aspnetForm")
-print br.form
-
-br["ctl00$phMainContent$dropDownAwardDate"] = ["Between"]
-br["ctl00$phMainContent$txtGrantDateFrom"] = "01/01/2004"
-br["ctl00$phMainContent$txtGrantDateTo"]  = "20/01/2004"
-print br
-
-response = br.submit()
-print response.read()
+scrape_and_look_for_next_link(starting_url)
